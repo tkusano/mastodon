@@ -8,10 +8,13 @@
 }
 
 .recovery-codes {
-  column-count: 2;
-  height: 100px;
+  list-style: none;
+  margin: 0 auto;
+  text-align: center;
+
   li {
-    list-style: decimal;
-    margin-left: 20px;
+    font-size: 125%;
+    line-height: 1.5;
+    letter-spacing: 1px;
   }
 }
