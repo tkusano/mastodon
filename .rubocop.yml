@@ -1,52 +1,98 @@
-Rails:
-  Enabled: true
+require:
+  - rubocop-rails
 
-Style/PerlBackrefs:
-  AutoCorrect: false
+AllCops:
+  TargetRubyVersion: 2.4
+  Exclude:
+  - 'spec/**/*'
+  - 'db/**/*'
+  - 'app/views/**/*'
+  - 'config/**/*'
+  - 'bin/*'
+  - 'Rakefile'
+  - 'node_modules/**/*'
+  - 'Vagrantfile'
+  - 'vendor/**/*'
+  - 'lib/json_ld/*'
+  - 'lib/templates/**/*'
 
-Style/ClassAndModuleChildren:
+Bundler/OrderedGems:
   Enabled: false
 
-Metrics/BlockNesting:
-  Max: 2
+Layout/AccessModifierIndentation:
+  EnforcedStyle: indent
 
-Metrics/LineLength:
-  AllowURI: true
+Layout/EmptyLineAfterMagicComment:
   Enabled: false
 
-Metrics/MethodLength:
-  CountComments: false
-  Max: 10
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: space
 
 Metrics/AbcSize:
   Max: 100
+
+Metrics/BlockLength:
+  Max: 35
+  Exclude:
+    - 'lib/tasks/**/*'
 
 Metrics/BlockNesting:
   Max: 3
 
 Metrics/ClassLength:
   CountComments: false
-  Max: 200
+  Max: 300
 
 Metrics/CyclomaticComplexity:
-  Max: 15
+  Max: 25
+
+Layout/LineLength:
+  AllowURI: true
+  Enabled: false
 
 Metrics/MethodLength:
+  CountComments: false
   Max: 55
 
 Metrics/ModuleLength:
   CountComments: false
   Max: 200
 
-Metrics/PerceivedComplexity:
-  Max: 10
-
 Metrics/ParameterLists:
-  Max: 4
+  Max: 5
   CountKeywordArgs: true
 
-Style/AccessModifierIndentation:
-  EnforcedStyle: indent
+Metrics/PerceivedComplexity:
+  Max: 20
+
+Naming/MemoizedInstanceVariableName:
+  Enabled: false
+
+Rails:
+  Enabled: true
+
+Rails/EnumHash:
+  Enabled: false
+
+Rails/HasAndBelongsToMany:
+  Enabled: false
+
+Rails/SkipsModelValidations:
+  Enabled: false
+
+Rails/HttpStatus:
+  Enabled: false
+
+Rails/Exit:
+  Exclude:
+    - 'lib/mastodon/*'
+    - 'lib/cli.rb'
+
+Rails/HelperInstanceVariable:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
 
 Style/CollectionMethods:
   Enabled: true
@@ -59,32 +105,34 @@ Style/Documentation:
 Style/DoubleNegation:
   Enabled: true
 
+Style/FormatStringToken:
+  Enabled: false
+
 Style/FrozenStringLiteralComment:
   Enabled: true
 
-Style/SpaceInsideHashLiteralBraces:
-  EnforcedStyle: space
-
-Style/TrailingCommaInLiteral:
-  EnforcedStyleForMultiline: 'comma'
-
-Style/RegexpLiteral:
+Style/GuardClause:
   Enabled: false
 
 Style/Lambda:
   Enabled: false
 
-Rails/HasAndBelongsToMany:
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%i': '()'
+    '%w': '()'
+
+Style/PerlBackrefs:
+  AutoCorrect: false
+
+Style/RegexpLiteral:
   Enabled: false
 
-AllCops:
-  TargetRubyVersion: 2.3
-  Exclude:
-  - 'spec/**/*'
-  - 'db/**/*'
-  - 'app/views/**/*'
-  - 'config/**/*'
-  - 'bin/*'
-  - 'Rakefile'
-  - 'node_modules/**/*'
-  - 'Vagrantfile'
+Style/SymbolArray:
+  Enabled: false
+
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: 'comma'
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: 'comma'

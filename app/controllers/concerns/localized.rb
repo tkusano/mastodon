@@ -7,31 +7,27 @@ module Localized
     around_action :set_locale
   end
 
-  private
-
   def set_locale
-    locale = default_locale
-
-    if user_signed_in?
-      begin
-        locale = current_user.try(:locale) || default_locale
-      rescue I18n::InvalidLocale
-        locale = default_locale
-      end
-    end
+    locale   = current_user.locale if respond_to?(:user_signed_in?) && user_signed_in?
+    locale ||= session[:locale] ||= default_locale
+    locale   = default_locale unless I18n.available_locales.include?(locale.to_sym)
 
     I18n.with_locale(locale) do
       yield
     end
   end
 
+  private
+
   def default_locale
-    ENV.fetch('DEFAULT_LOCALE') {
-      user_supplied_locale || I18n.default_locale
-    }
+    if ENV['DEFAULT_LOCALE'].present?
+      I18n.default_locale
+    else
+      request_locale || I18n.default_locale
+    end
   end
 
-  def user_supplied_locale
+  def request_locale
     http_accept_language.language_region_compatible_from(I18n.available_locales)
   end
 end

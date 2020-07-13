@@ -1,7 +1,19 @@
 # frozen_string_literal: true
+# == Schema Information
+#
+# Table name: settings
+#
+#  id         :bigint(8)        not null, primary key
+#  var        :string           not null
+#  value      :text
+#  thing_type :string
+#  created_at :datetime
+#  updated_at :datetime
+#  thing_id   :bigint(8)
+#
 
 class Setting < RailsSettings::Base
-  source Rails.root.join('config/settings.yml')
+  source Rails.root.join('config', 'settings.yml')
 
   def to_param
     var
@@ -11,7 +23,7 @@ class Setting < RailsSettings::Base
     def [](key)
       return super(key) unless rails_initialized?
 
-      val = Rails.cache.fetch(cache_key(key, @object)) do
+      val = Rails.cache.fetch(cache_key(key, nil)) do
         db_val = object(key)
 
         if db_val
@@ -23,13 +35,12 @@ class Setting < RailsSettings::Base
           default_settings[key]
         end
       end
-
       val
     end
 
     def all_as_records
       vars    = thing_scoped
-      records = vars.map { |r| [r.var, r] }.to_h
+      records = vars.each_with_object({}) { |r, h| h[r.var] = r }
 
       default_settings.each do |key, default_value|
         next if records.key?(key) || default_value.is_a?(Hash)
@@ -38,8 +49,6 @@ class Setting < RailsSettings::Base
 
       records
     end
-
-    private
 
     def default_settings
       return {} unless RailsSettings::Default.enabled?

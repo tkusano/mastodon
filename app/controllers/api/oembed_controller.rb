@@ -1,21 +1,34 @@
 # frozen_string_literal: true
 
-class Api::OEmbedController < ApiController
-  respond_to :json
+class Api::OEmbedController < Api::BaseController
+  skip_before_action :require_authenticated_user!
+
+  before_action :set_status
+  before_action :require_public_status!
 
   def show
-    @stream_entry = stream_entry_from_url(params[:url])
-    @width        = params[:maxwidth].present?  ? params[:maxwidth].to_i  : 400
-    @height       = params[:maxheight].present? ? params[:maxheight].to_i : 600
+    render json: @status, serializer: OEmbedSerializer, width: maxwidth_or_default, height: maxheight_or_default
   end
 
   private
 
-  def stream_entry_from_url(url)
-    params = Rails.application.routes.recognize_path(url)
+  def set_status
+    @status = status_finder.status
+  end
 
-    raise ActiveRecord::RecordNotFound unless params[:controller] == 'stream_entries' && params[:action] == 'show'
+  def require_public_status!
+    not_found if @status.hidden?
+  end
 
-    StreamEntry.find(params[:id])
+  def status_finder
+    StatusFinder.new(params[:url])
+  end
+
+  def maxwidth_or_default
+    (params[:maxwidth].presence || 400).to_i
+  end
+
+  def maxheight_or_default
+    params[:maxheight].present? ? params[:maxheight].to_i : nil
   end
 end
